@@ -1,7 +1,6 @@
 import "./App.css";
-import Graph from "./components/section/GraphSection";
-import Interface from "./components/section/UISection";
-
+import Graph from "@/components/section/GraphSection";
+import Interface from "@/components/section/UISection";
 function App() {
   return (
     <div
