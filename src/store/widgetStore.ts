@@ -1,21 +1,32 @@
 import { create } from "zustand";
 
-interface Arrow {
-  from: number;
-  to: number;
+interface Node {
+  id: string;
+  position: { x: number; y: number };
+  data: { label: string };
+}
+interface Edge {
+  id: string;
+  source: string;
+  target: string;
 }
 
 interface WidgetProps {
-  widgets: string[];
-  arrows: Arrow[];
-  addWidget: (widget: string) => void;
+  nodes: Node[];
+  edges: Edge[];
+  setNodes: (nodes: Node[]) => void;
+  setEdges: (edges: Edge[]) => void;
 }
 
 const useWidgetStore = create<WidgetProps>((set) => ({
-  widgets: [],
-  arrows: [],
-  addWidget: (widget) =>
-    set((state) => ({ widgets: [...state.widgets, widget] })),
+  nodes: [
+    { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
+    { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
+    { id: "3", position: { x: 0, y: 200 }, data: { label: "3" } },
+  ],
+  edges: [{ id: "e1-2", source: "1", target: "2" }],
+  setNodes: (nodes) => set({ nodes }),
+  setEdges: (edges) => set({ edges }),
 }));
 
 export default useWidgetStore;

@@ -6,6 +6,7 @@ function App() {
     <div
       style={{
         display: "flex",
+        height: "100%",
       }}
     >
       <Graph />
