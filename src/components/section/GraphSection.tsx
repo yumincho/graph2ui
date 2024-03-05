@@ -89,7 +89,6 @@ const Flow = () => {
           edges.concat({ id, source: connectingNodeId.current, target: id })
         );
       }
-      console.log(nodes);
     },
     [screenToFlowPosition, setNodes, nodes, setEdges, edges]
   );
