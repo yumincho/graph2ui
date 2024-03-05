@@ -1,7 +1,14 @@
 import useWidgetStore from "@/store/widgetStore";
 
-import { useCallback } from "react";
-import ReactFlow, { OnEdgesChange, OnNodesChange, OnConnect } from "reactflow";
+import { useCallback, useRef } from "react";
+import ReactFlow, {
+  OnEdgesChange,
+  OnNodesChange,
+  OnConnect,
+  useReactFlow,
+  OnConnectStart,
+  OnConnectEnd,
+} from "reactflow";
 import {
   Controls,
   applyNodeChanges,
@@ -20,6 +27,9 @@ const GraphSection = styled.div`
   border-radius: 4px;
 `;
 
+let id = 1;
+const getId = () => `${id++}`;
+
 const Flow = () => {
   const { nodes, edges, setNodes, setEdges } = useWidgetStore();
   const onNodesChange: OnNodesChange = useCallback(
@@ -32,10 +42,60 @@ const Flow = () => {
   );
   const onConnect: OnConnect = useCallback(
     (connection) => {
-      setEdges(addEdge(connection, edges));
+      setEdges(addEdge({ ...connection, type: "smoothstep" }, edges));
     },
     [setEdges, edges]
   );
+
+  const connectingNodeId = useRef("");
+  const { screenToFlowPosition } = useReactFlow();
+
+  interface onConnectStartProps {
+    nodeId: string | null;
+  }
+  const onConnectStart: OnConnectStart = useCallback(
+    (_, { nodeId }: onConnectStartProps) => {
+      nodeId ? (connectingNodeId.current = nodeId) : null;
+    },
+    []
+  );
+
+  const onConnectEnd: OnConnectEnd = useCallback(
+    (event: MouseEvent | TouchEvent) => {
+      if (!connectingNodeId.current) return;
+      const targetIsPane = (event.target as Element)?.classList.contains(
+        "react-flow__pane"
+      );
+
+      if (targetIsPane) {
+        // we need to remove the wrapper bounds, in order to get the correct position
+        const id = getId();
+        const newNode = {
+          id,
+          position: screenToFlowPosition({
+            x:
+              event instanceof MouseEvent
+                ? event.clientX
+                : event.changedTouches[0].clientX,
+            y:
+              event instanceof MouseEvent
+                ? event.clientY
+                : event.changedTouches[0].clientY,
+          }),
+          data: { label: `New Node` },
+          origin: [0.5, 0.0],
+        };
+
+        setNodes(nodes.concat(newNode));
+        setEdges(
+          edges.concat({ id, source: connectingNodeId.current, target: id })
+        );
+      }
+      console.log(nodes);
+    },
+    [screenToFlowPosition, setNodes, nodes, setEdges, edges]
+  );
+
   return (
     <ReactFlow
       nodes={nodes}
@@ -43,6 +103,9 @@ const Flow = () => {
       edges={edges}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
+      onConnectStart={onConnectStart}
+      onConnectEnd={onConnectEnd}
+      nodeOrigin={[0.5, 0.0]}
       fitView
     />
   );
