@@ -1,4 +1,5 @@
 import useWidgetStore from "@/store/widgetStore";
+import { v4 as uuidv4 } from "uuid";
 
 import { useCallback, useRef } from "react";
 import ReactFlow, {
@@ -26,9 +27,6 @@ const GraphSection = styled.div`
   border: 1px solid #ccc;
   border-radius: 4px;
 `;
-
-let id = 1;
-const getId = () => `${id++}`;
 
 const Flow = () => {
   const { nodes, edges, setNodes, setEdges } = useWidgetStore();
@@ -69,7 +67,7 @@ const Flow = () => {
 
       if (targetIsPane) {
         // we need to remove the wrapper bounds, in order to get the correct position
-        const id = getId();
+        const id = uuidv4();
         const newNode = {
           id,
           position: screenToFlowPosition({
