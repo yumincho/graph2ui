@@ -1,4 +1,4 @@
-import useWidgetStore from "@/store/widgetStore";
+import useWidgetStore, { Node } from "@/store/widgetStore";
 import { v4 as uuidv4 } from "uuid";
 
 import { useCallback, useRef } from "react";
@@ -29,7 +29,9 @@ const GraphSection = styled.div`
 `;
 
 const Flow = () => {
-  const { nodes, edges, setNodes, setEdges } = useWidgetStore();
+  const { nodes, edges, setNodes, setEdges, setSelectedNodeId } =
+    useWidgetStore();
+
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes(applyNodeChanges(changes, nodes)),
     [setNodes, nodes]
@@ -93,6 +95,10 @@ const Flow = () => {
     [screenToFlowPosition, setNodes, nodes, setEdges, edges]
   );
 
+  const onNodeClick = (node: Node) => {
+    setSelectedNodeId(node.id);
+  };
+
   return (
     <ReactFlow
       nodes={nodes}
@@ -102,6 +108,7 @@ const Flow = () => {
       onConnect={onConnect}
       onConnectStart={onConnectStart}
       onConnectEnd={onConnectEnd}
+      onNodeClick={(_, node) => onNodeClick(node)}
       nodeOrigin={[0.5, 0.0]}
       fitView
     />
@@ -109,9 +116,31 @@ const Flow = () => {
 };
 
 const Graph = () => {
+  const { nodes, selectedNodeId, setNodeLabel } = useWidgetStore();
+  const nodeLabel = nodes.find((node) => node.id === selectedNodeId)?.data
+    .label;
+
+  const onNodeLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const label = event.target.value;
+    setNodeLabel(selectedNodeId, label);
+  };
+
   return (
     <GraphSection>
       <h2>Graph</h2>
+      <div
+        style={{
+          backgroundColor: "#f4f4f4",
+          padding: "16px",
+          width: "200px",
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: "12px",
+        }}
+      >
+        <label>Change Node Name</label>
+        <input value={nodeLabel} onChange={onNodeLabelChange} />
+      </div>
       <ReactFlowProvider>
         <Flow />
         <Controls />
