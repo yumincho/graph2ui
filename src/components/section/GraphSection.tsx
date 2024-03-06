@@ -40,7 +40,7 @@ const Flow = () => {
   );
   const onConnect: OnConnect = useCallback(
     (connection) => {
-      setEdges(addEdge({ ...connection, type: "smoothstep" }, edges));
+      setEdges(addEdge({ ...connection }, edges));
     },
     [setEdges, edges]
   );
