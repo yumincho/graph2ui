@@ -12,6 +12,7 @@ import "reactflow/dist/style.css";
 
 import { useCallback, useRef } from "react";
 import ReactFlow, {
+  Connection,
   OnEdgesChange,
   OnNodesChange,
   OnConnect,
@@ -31,6 +32,21 @@ const Flow = () => {
     setSelectedEdgeId,
   } = useWidgetStore();
 
+  const makeClosedArrowEdge = (
+    props: Connection | { id: string; source: string; target: string }
+  ) => {
+    return {
+      ...props,
+      label: "",
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+      style: {
+        strokeWidth: 2,
+      },
+    } as Edge;
+  };
+
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes(applyNodeChanges(changes, nodes)),
     [setNodes, nodes]
@@ -40,8 +56,8 @@ const Flow = () => {
     [setEdges, edges]
   );
   const onConnect: OnConnect = useCallback(
-    (connection) => {
-      setEdges(addEdge({ ...connection }, edges));
+    (connection: Connection) => {
+      setEdges(addEdge(makeClosedArrowEdge(connection), edges));
     },
     [setEdges, edges]
   );
@@ -86,18 +102,13 @@ const Flow = () => {
 
         setNodes(nodes.concat(newNode));
         setEdges(
-          edges.concat({
-            id,
-            source: connectingNodeId.current,
-            target: id,
-            label: "",
-            markerEnd: {
-              type: MarkerType.ArrowClosed,
-            },
-            style: {
-              strokeWidth: 2,
-            },
-          })
+          edges.concat(
+            makeClosedArrowEdge({
+              id: id,
+              source: connectingNodeId.current,
+              target: id,
+            })
+          )
         );
       }
     },
