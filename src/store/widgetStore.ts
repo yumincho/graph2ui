@@ -1,15 +1,5 @@
 import { create } from "zustand";
-
-export interface Node {
-  id: string;
-  position: { x: number; y: number };
-  data: { label: string };
-}
-interface Edge {
-  id: string;
-  source: string;
-  target: string;
-}
+import type { Node, Edge } from "reactflow";
 
 interface WidgetProps {
   nodes: Node[];
