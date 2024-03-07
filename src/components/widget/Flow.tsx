@@ -18,6 +18,7 @@ import ReactFlow, {
   useReactFlow,
   OnConnectStart,
   OnConnectEnd,
+  MarkerType,
 } from "reactflow";
 
 const Flow = () => {
@@ -90,6 +91,12 @@ const Flow = () => {
             source: connectingNodeId.current,
             target: id,
             label: "",
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+            },
+            style: {
+              strokeWidth: 2,
+            },
           })
         );
       }
