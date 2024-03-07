@@ -6,6 +6,7 @@ import "reactflow/dist/style.css";
 import styled from "@emotion/styled";
 
 import Flow from "@/components/widget/Flow";
+import Editor from "../widget/Editor";
 
 const GraphSection = styled.div`
   padding: 1rem;
@@ -23,9 +24,11 @@ const Graph = () => {
     setNodeLabel,
     setEdgeLabel,
   } = useWidgetStore();
-  const nodeLabel = nodes.find((node) => node.id === selectedNodeId)?.data
-    .label;
-  const edgeLabel = edges
+
+  const nodeLabel: string = nodes.find((node) => node.id === selectedNodeId)
+    ?.data.label;
+
+  const edgeLabel: string | undefined = edges
     .find((edge) => edge.id === selectedEdgeId)
     ?.label?.toString();
 
@@ -49,38 +52,16 @@ const Graph = () => {
           gap: "12px",
         }}
       >
-        <div
-          style={{
-            backgroundColor: "#f4f4f4",
-            padding: "16px",
-            width: "200px",
-            display: "flex",
-            flexDirection: "column",
-            borderRadius: "12px",
-          }}
-        >
-          <label>Change Node Name</label>
-          <input
-            value={nodeLabel ? nodeLabel : ""}
-            onChange={onNodeLabelChange}
-          />
-        </div>
-        <div
-          style={{
-            backgroundColor: "#f4f4f4",
-            padding: "16px",
-            width: "200px",
-            display: "flex",
-            flexDirection: "column",
-            borderRadius: "12px",
-          }}
-        >
-          <label>Change Edge Prompt</label>
-          <input
-            value={edgeLabel ? edgeLabel : ""}
-            onChange={onEdgeLabelChange}
-          />
-        </div>
+        <Editor
+          editorName="Change Node Name"
+          label={nodeLabel}
+          onLabelChange={onNodeLabelChange}
+        />
+        <Editor
+          editorName="Change Edge Prompt"
+          label={edgeLabel ? edgeLabel : ""}
+          onLabelChange={onEdgeLabelChange}
+        />
       </div>
 
       <ReactFlowProvider>
