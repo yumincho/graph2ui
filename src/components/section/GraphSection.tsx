@@ -60,7 +60,10 @@ const Graph = () => {
           }}
         >
           <label>Change Node Name</label>
-          <input value={nodeLabel} onChange={onNodeLabelChange} />
+          <input
+            value={nodeLabel ? nodeLabel : ""}
+            onChange={onNodeLabelChange}
+          />
         </div>
         <div
           style={{
@@ -73,7 +76,10 @@ const Graph = () => {
           }}
         >
           <label>Change Edge Prompt</label>
-          <input value={edgeLabel} onChange={onEdgeLabelChange} />
+          <input
+            value={edgeLabel ? edgeLabel : ""}
+            onChange={onEdgeLabelChange}
+          />
         </div>
       </div>
 
