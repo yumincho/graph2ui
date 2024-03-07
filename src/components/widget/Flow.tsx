@@ -1,13 +1,7 @@
 import useWidgetStore from "@/store/widgetStore";
 import { v4 as uuidv4 } from "uuid";
 
-import {
-  applyNodeChanges,
-  applyEdgeChanges,
-  addEdge,
-  Node,
-  Edge,
-} from "reactflow";
+import { applyNodeChanges, applyEdgeChanges, addEdge, Edge } from "reactflow";
 import "reactflow/dist/style.css";
 
 import { useCallback, useRef } from "react";
@@ -115,14 +109,6 @@ const Flow = () => {
     [screenToFlowPosition, setNodes, nodes, setEdges, edges]
   );
 
-  const onNodeClick = (node: Node) => {
-    setSelectedNodeId(node.id);
-  };
-
-  const onEdgeClick = (edge: Edge) => {
-    setSelectedEdgeId(edge.id);
-  };
-
   return (
     <ReactFlow
       nodes={nodes}
@@ -132,8 +118,8 @@ const Flow = () => {
       onConnect={onConnect}
       onConnectStart={onConnectStart}
       onConnectEnd={onConnectEnd}
-      onNodeClick={(_, node) => onNodeClick(node)}
-      onEdgeClick={(_, edge) => onEdgeClick(edge)}
+      onNodeClick={(_, node) => setSelectedNodeId(node.id)}
+      onEdgeClick={(_, edge) => setSelectedEdgeId(edge.id)}
       nodeOrigin={[0.5, 0.0]}
       fitView
     />
