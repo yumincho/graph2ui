@@ -1,7 +1,13 @@
-import useWidgetStore, { Node } from "@/store/widgetStore";
+import useWidgetStore from "@/store/widgetStore";
 import { v4 as uuidv4 } from "uuid";
 
-import { applyNodeChanges, applyEdgeChanges, addEdge } from "reactflow";
+import {
+  applyNodeChanges,
+  applyEdgeChanges,
+  addEdge,
+  Node,
+  Edge,
+} from "reactflow";
 import "reactflow/dist/style.css";
 
 import { useCallback, useRef } from "react";
@@ -15,19 +21,23 @@ import ReactFlow, {
 } from "reactflow";
 
 const Flow = () => {
-  const { nodes, edges, setNodes, setEdges, setSelectedNodeId } =
-    useWidgetStore();
+  const {
+    nodes,
+    edges,
+    setNodes,
+    setEdges,
+    setSelectedNodeId,
+    setSelectedEdgeId,
+  } = useWidgetStore();
 
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes(applyNodeChanges(changes, nodes)),
     [setNodes, nodes]
   );
-
   const onEdgesChange: OnEdgesChange = useCallback(
     (changes) => setEdges(applyEdgeChanges(changes, edges)),
     [setEdges, edges]
   );
-
   const onConnect: OnConnect = useCallback(
     (connection) => {
       setEdges(addEdge({ ...connection }, edges));
@@ -56,7 +66,6 @@ const Flow = () => {
       );
 
       if (targetIsPane) {
-        // we need to remove the wrapper bounds, in order to get the correct position
         const id = uuidv4();
         const newNode = {
           id,
@@ -76,7 +85,12 @@ const Flow = () => {
 
         setNodes(nodes.concat(newNode));
         setEdges(
-          edges.concat({ id, source: connectingNodeId.current, target: id })
+          edges.concat({
+            id,
+            source: connectingNodeId.current,
+            target: id,
+            label: "",
+          })
         );
       }
     },
@@ -85,6 +99,10 @@ const Flow = () => {
 
   const onNodeClick = (node: Node) => {
     setSelectedNodeId(node.id);
+  };
+
+  const onEdgeClick = (edge: Edge) => {
+    setSelectedEdgeId(edge.id);
   };
 
   return (
@@ -97,6 +115,7 @@ const Flow = () => {
       onConnectStart={onConnectStart}
       onConnectEnd={onConnectEnd}
       onNodeClick={(_, node) => onNodeClick(node)}
+      onEdgeClick={(_, edge) => onEdgeClick(edge)}
       nodeOrigin={[0.5, 0.0]}
       fitView
     />
