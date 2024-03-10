@@ -17,9 +17,9 @@ interface WidgetProps {
 const useWidgetStore = create<WidgetProps>((set) => ({
   nodes: [
     {
-      id: "0",
+      id: "root",
       position: { x: 0, y: 0 },
-      data: { label: "New Node" },
+      data: { label: "Root Node" },
     },
   ],
   selectedNodeId: "",

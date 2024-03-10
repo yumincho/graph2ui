@@ -9,6 +9,7 @@ import ReactFlow, {
   Connection,
   OnEdgesChange,
   OnNodesChange,
+  NodeChange,
   OnConnect,
   useReactFlow,
   OnConnectStart,
@@ -45,6 +46,23 @@ const Flow = () => {
     (changes) => setNodes(applyNodeChanges(changes, nodes)),
     [setNodes, nodes]
   );
+
+  const { getNode } = useReactFlow();
+
+  function handleNodesChange(changes: NodeChange[]) {
+    const nextChanges = changes.reduce((acc, change) => {
+      if (change.type === "remove") {
+        const node = getNode(change.id);
+        if (node?.id !== "root") {
+          return [...acc, change];
+        }
+        return acc;
+      }
+      return [...acc, change];
+    }, [] as NodeChange[]);
+    onNodesChange(nextChanges);
+  }
+
   const onEdgesChange: OnEdgesChange = useCallback(
     (changes) => setEdges(applyEdgeChanges(changes, edges)),
     [setEdges, edges]
@@ -112,7 +130,7 @@ const Flow = () => {
   return (
     <ReactFlow
       nodes={nodes}
-      onNodesChange={onNodesChange}
+      onNodesChange={handleNodesChange}
       edges={edges}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
