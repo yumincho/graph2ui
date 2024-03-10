@@ -54,7 +54,7 @@ const Graph = () => {
       >
         <Editor
           editorName="Change Node Name"
-          label={nodeLabel}
+          label={nodeLabel ? nodeLabel : ""}
           onLabelChange={onNodeLabelChange}
         />
         <Editor
