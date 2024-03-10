@@ -1,4 +1,5 @@
 import useWidgetStore from "@/store/widgetStore";
+import { useState } from "react";
 
 import { Controls, ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
@@ -7,6 +8,7 @@ import styled from "@emotion/styled";
 
 import Flow from "@/components/widget/Flow";
 import Editor from "../widget/Editor";
+import Modal from "../widget/Modal";
 
 const GraphSection = styled.div`
   padding: 1rem;
@@ -24,6 +26,8 @@ const Graph = () => {
     setNodeLabel,
     setEdgeLabel,
   } = useWidgetStore();
+
+  const [toggleModal, setToggleModal] = useState(false);
 
   const nodeLabel: string = nodes.find((node) => node.id === selectedNodeId)
     ?.data.label;
@@ -45,6 +49,7 @@ const Graph = () => {
   return (
     <GraphSection>
       <h2>Graph</h2>
+      {toggleModal && <Modal setToggleModal={setToggleModal} />}
       <div
         style={{
           display: "flex",
@@ -65,7 +70,7 @@ const Graph = () => {
       </div>
 
       <ReactFlowProvider>
-        <Flow />
+        <Flow setToggleModal={setToggleModal} />
         <Controls />
       </ReactFlowProvider>
     </GraphSection>
