@@ -17,6 +17,10 @@ import ReactFlow, {
   MarkerType,
 } from "reactflow";
 
+interface onConnectStartProps {
+  nodeId: string | null;
+}
+
 const Flow = () => {
   const {
     nodes,
@@ -26,6 +30,8 @@ const Flow = () => {
     setSelectedNodeId,
     setSelectedEdgeId,
   } = useWidgetStore();
+
+  const { getNode } = useReactFlow();
 
   const makeClosedArrowEdge = (
     props: Connection | { id: string; source: string; target: string }
@@ -47,8 +53,6 @@ const Flow = () => {
     [setNodes, nodes]
   );
 
-  const { getNode } = useReactFlow();
-
   function handleNodesChange(changes: NodeChange[]) {
     const nextChanges = changes.reduce((acc, change) => {
       if (change.type === "remove") {
@@ -67,6 +71,7 @@ const Flow = () => {
     (changes) => setEdges(applyEdgeChanges(changes, edges)),
     [setEdges, edges]
   );
+
   const onConnect: OnConnect = useCallback(
     (connection: Connection) => {
       setEdges(addEdge(makeClosedArrowEdge(connection), edges));
@@ -77,9 +82,6 @@ const Flow = () => {
   const connectingNodeId = useRef("");
   const { screenToFlowPosition } = useReactFlow();
 
-  interface onConnectStartProps {
-    nodeId: string | null;
-  }
   const onConnectStart: OnConnectStart = useCallback(
     (_, { nodeId }: onConnectStartProps) => {
       nodeId ? (connectingNodeId.current = nodeId) : null;
