@@ -73,16 +73,13 @@ const Modal = ({ setToggleModal }: ToggleModalProps) => {
         <IoClose size={24} style={iconStyle} onClick={handleOnClick} />
       </Header>
       <Divider />
-      <Editor
-        editorName="Change Edge Prompt"
-        label={edgeLabel ? edgeLabel : ""}
-        onLabelChange={onEdgeLabelChange}
-      />
+
       <Content>
-        <Row>
-          <span>Name:</span>
-          <span>{selectedEdge?.label ? selectedEdge?.label : "(empty)"}</span>
-        </Row>
+        <Editor
+          editorName="Name:"
+          label={edgeLabel ? edgeLabel : ""}
+          onLabelChange={onEdgeLabelChange}
+        />
         <Row>
           <span>From:</span>
           <span>{sourceNode?.data.label}</span>
