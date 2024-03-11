@@ -11,10 +11,13 @@ import Editor from "../widget/Editor";
 import Modal from "../widget/EdgeModal";
 
 const GraphSection = styled.div`
-  padding: 1rem;
   flex: 1 0 0;
+
+  padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+
+  z-index: 1;
 `;
 
 const Graph = () => {

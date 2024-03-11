@@ -14,6 +14,8 @@ const Dialog = styled.dialog`
 
   padding: 0px;
   background-color: white;
+
+  z-index: 2;
 `;
 
 const Header = styled.div`
