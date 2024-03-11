@@ -142,7 +142,10 @@ const Flow = ({ setToggleModal }: ToggleModalProps) => {
       onConnect={onConnect}
       onConnectStart={onConnectStart}
       onConnectEnd={onConnectEnd}
-      onNodeClick={(_, node) => setSelectedNodeId(node.id)}
+      onNodeClick={(_, node) => {
+        setSelectedNodeId(node.id);
+        setToggleModal(false);
+      }}
       onEdgeClick={(_, edge) => {
         setSelectedEdgeId(edge.id);
         setToggleModal(true);
