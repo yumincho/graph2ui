@@ -8,7 +8,7 @@ import styled from "@emotion/styled";
 
 import Flow from "@/components/widget/Flow";
 import Editor from "../widget/Editor";
-import Modal from "../widget/Modal";
+import Modal from "../widget/EdgeModal";
 
 const GraphSection = styled.div`
   padding: 1rem;
@@ -18,32 +18,16 @@ const GraphSection = styled.div`
 `;
 
 const Graph = () => {
-  const {
-    nodes,
-    edges,
-    selectedNodeId,
-    selectedEdgeId,
-    setNodeLabel,
-    setEdgeLabel,
-  } = useWidgetStore();
+  const { nodes, selectedNodeId, setNodeLabel } = useWidgetStore();
 
   const [toggleModal, setToggleModal] = useState(false);
 
   const nodeLabel: string = nodes.find((node) => node.id === selectedNodeId)
     ?.data.label;
 
-  const edgeLabel: string | undefined = edges
-    .find((edge) => edge.id === selectedEdgeId)
-    ?.label?.toString();
-
   const onNodeLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const label = event.target.value;
     setNodeLabel(selectedNodeId, label);
-  };
-
-  const onEdgeLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const label = event.target.value;
-    setEdgeLabel(selectedEdgeId, label);
   };
 
   return (
@@ -61,11 +45,6 @@ const Graph = () => {
           editorName="Change Node Name"
           label={nodeLabel ? nodeLabel : ""}
           onLabelChange={onNodeLabelChange}
-        />
-        <Editor
-          editorName="Change Edge Prompt"
-          label={edgeLabel ? edgeLabel : ""}
-          onLabelChange={onEdgeLabelChange}
         />
       </div>
 

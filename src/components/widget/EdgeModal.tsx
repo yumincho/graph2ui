@@ -2,6 +2,7 @@ import useWidgetStore from "@/store/widgetStore";
 import styled from "@emotion/styled";
 import { IoClose } from "react-icons/io5";
 import Divider from "./Divider";
+import Editor from "./Editor";
 
 const Dialog = styled.dialog`
   display: flex;
@@ -47,7 +48,7 @@ interface ToggleModalProps {
 }
 
 const Modal = ({ setToggleModal }: ToggleModalProps) => {
-  const { nodes, edges, selectedEdgeId } = useWidgetStore();
+  const { nodes, edges, selectedEdgeId, setEdgeLabel } = useWidgetStore();
   const selectedEdge = edges.find((edge) => edge.id === selectedEdgeId);
   const sourceNode = nodes.find((node) => node.id === selectedEdge?.source);
   const targetNode = nodes.find((node) => node.id === selectedEdge?.target);
@@ -55,6 +56,16 @@ const Modal = ({ setToggleModal }: ToggleModalProps) => {
   const handleOnClick = () => {
     setToggleModal((curr) => !curr);
   };
+
+  const edgeLabel: string | undefined = edges
+    .find((edge) => edge.id === selectedEdgeId)
+    ?.label?.toString();
+
+  const onEdgeLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const label = event.target.value;
+    setEdgeLabel(selectedEdgeId, label);
+  };
+
   return (
     <Dialog open>
       <Header>
@@ -62,6 +73,11 @@ const Modal = ({ setToggleModal }: ToggleModalProps) => {
         <IoClose size={24} style={iconStyle} onClick={handleOnClick} />
       </Header>
       <Divider />
+      <Editor
+        editorName="Change Edge Prompt"
+        label={edgeLabel ? edgeLabel : ""}
+        onLabelChange={onEdgeLabelChange}
+      />
       <Content>
         <Row>
           <span>Name:</span>
