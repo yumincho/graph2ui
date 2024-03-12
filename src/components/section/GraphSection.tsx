@@ -23,7 +23,7 @@ const GraphSection = styled.div`
 const Graph = () => {
   const { nodes, selectedNodeId, setNodeLabel } = useWidgetStore();
 
-  const [toggleModal, setToggleModal] = useState(false);
+  const [toggleEdgeModal, setToggleEdgeModal] = useState(false);
 
   const nodeLabel: string = nodes.find((node) => node.id === selectedNodeId)
     ?.data.label;
@@ -36,7 +36,7 @@ const Graph = () => {
   return (
     <GraphSection>
       <h2>Graph</h2>
-      {toggleModal && <Modal setToggleModal={setToggleModal} />}
+      {toggleEdgeModal && <Modal setToggleEdgeModal={setToggleEdgeModal} />}
       <div
         style={{
           display: "flex",
@@ -52,7 +52,7 @@ const Graph = () => {
       </div>
 
       <ReactFlowProvider>
-        <Flow setToggleModal={setToggleModal} />
+        <Flow setToggleEdgeModal={setToggleEdgeModal} />
         <Controls />
       </ReactFlowProvider>
     </GraphSection>

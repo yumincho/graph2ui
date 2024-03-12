@@ -21,11 +21,11 @@ interface onConnectStartProps {
   nodeId: string | null;
 }
 
-interface ToggleModalProps {
-  setToggleModal: React.Dispatch<React.SetStateAction<boolean>>;
+export interface ToggleEdgeModalProps {
+  setToggleEdgeModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Flow = ({ setToggleModal }: ToggleModalProps) => {
+const Flow = ({ setToggleEdgeModal }: ToggleEdgeModalProps) => {
   const {
     nodes,
     edges,
@@ -144,11 +144,11 @@ const Flow = ({ setToggleModal }: ToggleModalProps) => {
       onConnectEnd={onConnectEnd}
       onNodeClick={(_, node) => {
         setSelectedNodeId(node.id);
-        setToggleModal(false);
+        setToggleEdgeModal(false);
       }}
       onEdgeClick={(_, edge) => {
         setSelectedEdgeId(edge.id);
-        setToggleModal(true);
+        setToggleEdgeModal(true);
       }}
       nodeOrigin={[0.5, 0.0]}
       fitView
