@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { IoClose } from "react-icons/io5";
 import Divider from "./Divider";
 import Editor from "./Editor";
-import { ToggleEdgeModalProps } from "./Flow";
+import { ToggleModalProps } from "./Flow";
 
 const Dialog = styled.dialog`
   display: flex;
@@ -98,7 +98,9 @@ const EdgeInfo = ({
   );
 };
 
-const EdgeModal = ({ setToggleEdgeModal }: ToggleEdgeModalProps) => {
+const EdgeModal = ({
+  setToggleEdgeModal,
+}: Pick<ToggleModalProps, "setToggleEdgeModal">) => {
   const { nodes, edges, selectedEdgeId, setEdgeLabel } = useWidgetStore();
   const selectedEdge = edges.find((edge) => edge.id === selectedEdgeId);
   const sourceNode = nodes.find((node) => node.id === selectedEdge?.source);

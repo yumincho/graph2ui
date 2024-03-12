@@ -21,11 +21,12 @@ interface onConnectStartProps {
   nodeId: string | null;
 }
 
-export interface ToggleEdgeModalProps {
+export interface ToggleModalProps {
+  setToggleNodeModal: React.Dispatch<React.SetStateAction<boolean>>;
   setToggleEdgeModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Flow = ({ setToggleEdgeModal }: ToggleEdgeModalProps) => {
+const Flow = ({ setToggleNodeModal, setToggleEdgeModal }: ToggleModalProps) => {
   const {
     nodes,
     edges,
@@ -144,10 +145,12 @@ const Flow = ({ setToggleEdgeModal }: ToggleEdgeModalProps) => {
       onConnectEnd={onConnectEnd}
       onNodeClick={(_, node) => {
         setSelectedNodeId(node.id);
+        setToggleNodeModal(true);
         setToggleEdgeModal(false);
       }}
       onEdgeClick={(_, edge) => {
         setSelectedEdgeId(edge.id);
+        setToggleNodeModal(false);
         setToggleEdgeModal(true);
       }}
       nodeOrigin={[0.5, 0.0]}
