@@ -4,6 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 import { applyNodeChanges, applyEdgeChanges, addEdge, Edge } from "reactflow";
 import "reactflow/dist/style.css";
 
+import NodeModal from "@/components/widget/NodeModal";
+import EdgeModal from "@/components/widget/EdgeModal";
+
 import { useCallback, useRef } from "react";
 import ReactFlow, {
   Connection,
@@ -16,17 +19,16 @@ import ReactFlow, {
   OnConnectEnd,
   MarkerType,
 } from "reactflow";
-
+import { useModal } from "@/hooks/useModal";
 interface onConnectStartProps {
   nodeId: string | null;
 }
-
 export interface ToggleModalProps {
   setToggleNodeModal: React.Dispatch<React.SetStateAction<boolean>>;
   setToggleEdgeModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Flow = ({ setToggleNodeModal, setToggleEdgeModal }: ToggleModalProps) => {
+const Flow = () => {
   const {
     nodes,
     edges,
@@ -37,6 +39,8 @@ const Flow = ({ setToggleNodeModal, setToggleEdgeModal }: ToggleModalProps) => {
   } = useWidgetStore();
 
   const { getNode } = useReactFlow();
+
+  const modal = useModal();
 
   const makeClosedArrowEdge = (
     props: Connection | { id: string; source: string; target: string }
@@ -145,13 +149,11 @@ const Flow = ({ setToggleNodeModal, setToggleEdgeModal }: ToggleModalProps) => {
       onConnectEnd={onConnectEnd}
       onNodeClick={(_, node) => {
         setSelectedNodeId(node.id);
-        setToggleNodeModal(true);
-        setToggleEdgeModal(false);
+        modal.open(NodeModal);
       }}
       onEdgeClick={(_, edge) => {
         setSelectedEdgeId(edge.id);
-        setToggleNodeModal(false);
-        setToggleEdgeModal(true);
+        modal.open(EdgeModal);
       }}
       nodeOrigin={[0.5, 0.0]}
       fitView

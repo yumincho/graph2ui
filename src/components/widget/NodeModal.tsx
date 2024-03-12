@@ -3,9 +3,13 @@ import styled from "@emotion/styled";
 import { IoClose } from "react-icons/io5";
 import Divider from "./Divider";
 import Editor from "./Editor";
-import { ToggleModalProps } from "./Flow";
 
-const Dialog = styled.dialog`
+const Dialog = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   display: flex;
   flex-direction: column;
 
@@ -46,14 +50,8 @@ const Content = styled.div`
   padding: 20px;
 `;
 
-const NodeModal = ({
-  setToggleNodeModal,
-}: Pick<ToggleModalProps, "setToggleNodeModal">) => {
+const NodeModal = ({ onClose }: { onClose: () => void }) => {
   const { nodes, selectedNodeId, setNodeLabel } = useWidgetStore();
-
-  const handleOnClick = () => {
-    setToggleNodeModal((curr) => !curr);
-  };
 
   const nodeLabel: string | undefined = nodes
     .find((edge) => edge.id === selectedNodeId)
@@ -68,7 +66,7 @@ const NodeModal = ({
     <Dialog>
       <Header>
         <h4>Node</h4>
-        <IoClose size={24} style={iconStyle} onClick={handleOnClick} />
+        <IoClose size={24} style={iconStyle} onClick={onClose} />
       </Header>
       <Divider />
 

@@ -3,9 +3,13 @@ import styled from "@emotion/styled";
 import { IoClose } from "react-icons/io5";
 import Divider from "./Divider";
 import Editor from "./Editor";
-import { ToggleModalProps } from "./Flow";
 
-const Dialog = styled.dialog`
+const Dialog = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   display: flex;
   flex-direction: column;
 
@@ -98,17 +102,11 @@ const EdgeInfo = ({
   );
 };
 
-const EdgeModal = ({
-  setToggleEdgeModal,
-}: Pick<ToggleModalProps, "setToggleEdgeModal">) => {
+const EdgeModal = ({ onClose }: { onClose: () => void }) => {
   const { nodes, edges, selectedEdgeId, setEdgeLabel } = useWidgetStore();
   const selectedEdge = edges.find((edge) => edge.id === selectedEdgeId);
   const sourceNode = nodes.find((node) => node.id === selectedEdge?.source);
   const targetNode = nodes.find((node) => node.id === selectedEdge?.target);
-
-  const handleOnClick = () => {
-    setToggleEdgeModal((curr) => !curr);
-  };
 
   const edgeLabel: string | undefined = edges
     .find((edge) => edge.id === selectedEdgeId)
@@ -123,7 +121,7 @@ const EdgeModal = ({
     <Dialog>
       <Header>
         <h4>Edge</h4>
-        <IoClose size={24} style={iconStyle} onClick={handleOnClick} />
+        <IoClose size={24} style={iconStyle} onClick={onClose} />
       </Header>
       <Divider />
 
