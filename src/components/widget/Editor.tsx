@@ -9,21 +9,16 @@ const Editor = ({ editorName, label, onLabelChange }: EditorProps) => {
     <div
       style={{
         display: "flex",
-        justifyContent: "space-between",
-        alignContent: "center",
+        flexDirection: "column",
+        gap: "4px",
 
-        borderRadius: "12px",
         width: "auto",
-        padding: "12px",
-
-        backgroundColor: "#f4f4f4",
       }}
     >
       <label
         style={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: "left",
         }}
       >
         {editorName}
@@ -31,7 +26,7 @@ const Editor = ({ editorName, label, onLabelChange }: EditorProps) => {
       <input
         value={label}
         onChange={onLabelChange}
-        style={{ width: "100%", marginLeft: "12px" }}
+        style={{ width: "auto", padding: "8px" }}
       />
     </div>
   );

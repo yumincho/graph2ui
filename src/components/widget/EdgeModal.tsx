@@ -8,9 +8,14 @@ const Dialog = styled.dialog`
   display: flex;
   flex-direction: column;
 
-  border-radius: 4px;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+    0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
+    0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
+
   width: 400px;
-  height: 300px;
+  height: fit-content;
 
   padding: 0px;
   background-color: white;
@@ -22,7 +27,7 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  padding: 12px 20px;
 `;
 
 const iconStyle = {
@@ -36,20 +41,67 @@ const iconStyle = {
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 8px;
+  gap: 20px;
+  padding: 20px;
 `;
 
-const Row = styled.div`
+const Infos = styled.div`
   display: flex;
-  justify-content: space-between;
-  padding: 8px;
+  flex-direction: row;
+`;
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: left;
+
+  width: 100%;
+`;
+
+const InfoLabel = styled.label`
+  text-align: left;
+`;
+
+const InfoValue = styled.span`
+  font-weight: bold;
+  text-align: left;
+`;
+
+const Prompt = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  width: auto;
 `;
 
 interface ToggleModalProps {
   setToggleModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal = ({ setToggleModal }: ToggleModalProps) => {
+const EdgeInfo = ({
+  fromNode,
+  toNode,
+}: {
+  fromNode: string;
+  toNode: string;
+}) => {
+  return (
+    <Infos>
+      <Info>
+        <InfoLabel>From</InfoLabel>
+        <InfoValue>{fromNode}</InfoValue>
+      </Info>
+      <Info>
+        <InfoLabel>To</InfoLabel>
+        <InfoValue>{toNode}</InfoValue>
+      </Info>
+    </Infos>
+  );
+};
+
+const EdgeModal = ({ setToggleModal }: ToggleModalProps) => {
   const { nodes, edges, selectedEdgeId, setEdgeLabel } = useWidgetStore();
   const selectedEdge = edges.find((edge) => edge.id === selectedEdgeId);
   const sourceNode = nodes.find((node) => node.id === selectedEdge?.source);
@@ -69,7 +121,7 @@ const Modal = ({ setToggleModal }: ToggleModalProps) => {
   };
 
   return (
-    <Dialog open>
+    <Dialog>
       <Header>
         <h4>Edge</h4>
         <IoClose size={24} style={iconStyle} onClick={handleOnClick} />
@@ -77,22 +129,22 @@ const Modal = ({ setToggleModal }: ToggleModalProps) => {
       <Divider />
 
       <Content>
+        <EdgeInfo
+          fromNode={sourceNode?.data.label}
+          toNode={targetNode?.data.label}
+        />
         <Editor
-          editorName="Name:"
+          editorName="Name"
           label={edgeLabel ? edgeLabel : ""}
           onLabelChange={onEdgeLabelChange}
         />
-        <Row>
-          <span>From:</span>
-          <span>{sourceNode?.data.label}</span>
-        </Row>
-        <Row>
-          <span>To:</span>
-          <div>{targetNode?.data.label}</div>
-        </Row>
+        <Prompt>
+          <InfoLabel>Prompt</InfoLabel>
+          <textarea rows={8} style={{ resize: "none", padding: "8px" }} />
+        </Prompt>
       </Content>
     </Dialog>
   );
 };
 
-export default Modal;
+export default EdgeModal;
