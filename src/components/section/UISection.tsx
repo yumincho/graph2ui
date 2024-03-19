@@ -12,9 +12,11 @@ const UISection = styled.div`
 `;
 
 const Widget = styled.div`
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  text-align: left;
 `;
 
 const DefaultUI = styled.div`
@@ -25,6 +27,8 @@ const DefaultUI = styled.div`
 const RootNode = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 8px;
+
   align-items: flex-start;
   width: 100%;
 `;
@@ -66,7 +70,18 @@ const Interface = () => {
       </DefaultUI>
       <GeneratedUI>
         {nodes.slice(1).map((node) => (
-          <Widget key={node.id}>{node.data.label}</Widget>
+          <>
+            <Widget key={node.id}>
+              {node.data.label}
+              <div
+                style={{
+                  height: "100px",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "4px",
+                }}
+              ></div>
+            </Widget>
+          </>
         ))}
       </GeneratedUI>
     </UISection>
