@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { IoClose } from "react-icons/io5";
 import Divider from "./Divider";
 import Editor from "./Editor";
+import usePromptStore from "@/store/promptStore";
 
 const Dialog = styled.div`
   position: absolute;
@@ -73,14 +74,6 @@ const InfoValue = styled.span`
   text-align: left;
 `;
 
-const Prompt = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-
-  width: auto;
-`;
-
 const EdgeInfo = ({
   fromNode,
   toNode,
@@ -104,6 +97,9 @@ const EdgeInfo = ({
 
 const EdgeModal = ({ onClose }: { onClose: () => void }) => {
   const { nodes, edges, selectedEdgeId, setEdgeLabel } = useWidgetStore();
+
+  const { prompts, setPrompt } = usePromptStore();
+
   const selectedEdge = edges.find((edge) => edge.id === selectedEdgeId);
   const sourceNode = nodes.find((node) => node.id === selectedEdge?.source);
   const targetNode = nodes.find((node) => node.id === selectedEdge?.target);
@@ -112,9 +108,20 @@ const EdgeModal = ({ onClose }: { onClose: () => void }) => {
     .find((edge) => edge.id === selectedEdgeId)
     ?.label?.toString();
 
-  const onEdgeLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const edgePrompt: string | undefined = prompts
+    .find((prompt) => prompt.id === selectedEdgeId)
+    ?.prompt?.toString();
+
+  const onEdgeLabelChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const label = event.target.value;
     setEdgeLabel(selectedEdgeId, label);
+  };
+
+  const onEdgePromptChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const prompt = event.target.value;
+    setPrompt(selectedEdgeId, prompt);
   };
 
   return (
@@ -135,10 +142,12 @@ const EdgeModal = ({ onClose }: { onClose: () => void }) => {
           label={edgeLabel ? edgeLabel : ""}
           onLabelChange={onEdgeLabelChange}
         />
-        <Prompt>
-          <InfoLabel>Prompt</InfoLabel>
-          <textarea rows={8} style={{ resize: "none", padding: "8px" }} />
-        </Prompt>
+        <Editor
+          editorName="Prompt"
+          label={edgePrompt ? edgePrompt : ""}
+          onLabelChange={onEdgePromptChange}
+          rows={8}
+        />
       </Content>
     </Dialog>
   );

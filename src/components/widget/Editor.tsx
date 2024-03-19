@@ -1,10 +1,16 @@
 interface EditorProps {
   editorName: string;
   label: string;
-  onLabelChange: (_: React.ChangeEvent<HTMLInputElement>) => void;
+  onLabelChange: (_: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  rows?: number;
 }
 
-const Editor = ({ editorName, label, onLabelChange }: EditorProps) => {
+const Editor = ({
+  editorName,
+  label,
+  onLabelChange,
+  rows = 1,
+}: EditorProps) => {
   return (
     <div
       style={{
@@ -23,10 +29,11 @@ const Editor = ({ editorName, label, onLabelChange }: EditorProps) => {
       >
         {editorName}
       </label>
-      <input
+      <textarea
         value={label}
         onChange={onLabelChange}
-        style={{ width: "auto", padding: "8px" }}
+        style={{ width: "auto", padding: "8px", resize: "none" }}
+        rows={rows}
       />
     </div>
   );
